@@ -111,12 +111,12 @@ if length(leafpath2) == length(lca)
             pwgz_change = bsxfun(@times, pzgw_change, pV);
             alpha1_change = sum(pwgz_change, 2);            
             alpha1_change = alpha1_change / sum(alpha1_change) * alphasum;
-            pwgz(changed_index, :) = pwgz_change;
+            pzgw(changed_index, :) = pzgw_change;
             alpha1(changed_index) = alpha1_change;
             node_t2.alpha1 = alpha1;
-            node_t2.twmatparent = pwgz;
+            node_t2.twmatparent = pzgw;
             for i = 1:size(node_t2.children, 2)
-                node_t2.children{i}.twmati = pwgz(i,:);
+                node_t2.children{i}.twmati = pwgz
             end
         end
         p_remain = p_remain .* pzgw(pindex, :);       
@@ -137,5 +137,7 @@ if length(leafpath2) == length(lca)
 else
     
 end
+
+
 
 end

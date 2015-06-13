@@ -17,6 +17,7 @@ classdef node < handle
    parent = [];
    dwmat = [];
    twmati=[];
+   twmatparent = [];
    topici = [];
    alpha1 = [];
    name = [];

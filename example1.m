@@ -21,7 +21,7 @@
 % read data
 global vocabulary parentfolder datafolder
 
-parentfolder = 'c:/Users/xliu93.UOFI/Work/kddrelease/kddrelease';
+parentfolder = 'c:/Users/xliu93.UOFI/Work/kddrelease/kdd2015release';
 datafolder = 'c:/Users/xliu93.UOFI/Work/kddrelease/kdd_data';
 dataname = 'dblptitle';
 

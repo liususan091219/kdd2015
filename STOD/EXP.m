@@ -52,4 +52,6 @@ for z=1:k
     currentnode.children{z} = childi;
 end
 
+currentnode.twmatparent = twmat;
+
 end
