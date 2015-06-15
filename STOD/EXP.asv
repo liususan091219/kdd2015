@@ -27,13 +27,13 @@ for i=1:size(leafpath, 2)
    pzgw = diag(currentnode.alpha1) * twmat; % p(z|w) is proportional to p(w|z)p(z)
    pzgw = bsxfun(@rdivide, pzgw, sum(pzgw));
    twmati = currentnode.children{1,direction}.twmati;
-   voc_p_mapi = currentnode.children{1, direction}.voc_p_map;
+   voc_map = currentnode.children{1, direction}.vocabulary_map;
    %twmatinz = twmati > 0;
    pzgmi = pzgw(direction,:);
    %length = sum(twmatinz);
    length = size(twmati, 2);
    %dwmat = dwmat(:,twmatinz) * sparse(1:length, 1:length, pzgmi(:,twmatinz));
-   dwmat = dwmat(:, voc_p_mapi) * sparse(1:length, 1:length, pzgmi(:, voc_p_mapi));
+   dwmat = dwmat(:, voc_map) * sparse(1:len
    currentnode = currentnode.children{1,direction};
 end
 
@@ -50,11 +50,10 @@ currentnode.alpha1 = inferred.alpha;
 for z=1:k
 	twmati = twmat(z,:);
     twmatinz = twmati > 0;
-    voc_V_mapi = currentnode.voc_V_map(find(twmatinz));
+    voc_map = currentnode.vocabulary_map(twmatinz);
     [~, ind] = sort(twmati, 'descend');
-    topici = vocabulary(currentnode.voc_V_map(ind(1, 1:10)));
-    childi = node(twmati(twmatinz), currentnode, topici, [currentnode.name, num2str(z)], voc_V_mapi);
-    childi.voc_p_map = find(twmatinz);
+    topici = vocabulary(ind(1, 1:10));
+    childi = node(twmati(twmatinz), currentnode, topici, [currentnode.name, num2str(z)], voc_map);
     currentnode.children{z} = childi;
     currentnode.twmatparent = twmat;
 end

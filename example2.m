@@ -31,17 +31,17 @@ path([parentfolder, '/STOD/'], path);
 %LoadData;
 SetParameters;
 
-t.tree = node([], [], [], '1');
+t.tree = node([], [], [], '1', 1:size(vocabulary, 1));
 
-EXP(t, [], 3, dwmat, options);
+EXP(t, [], 2, dwmat, options);
 
-EXP(t, [2], 2, dwmat, options);
-EXP(t, [3], 2, dwmat, options);
+EXP(t, [1], 2, dwmat, options);
+EXP(t, [1, 1], 2, dwmat, options);
 
-EXP(t, [2, 1], 2, dwmat, options);
-EXP(t, [2, 2], 3, dwmat, options);
+EXP(t, [1, 1,  1], 2, dwmat, options);
+%EXP(t, [1, 1,  1, 1], 2, dwmat, options);
 
-MER(t, [2, 2], [2, 1]);
+MER(t, [1], [1, 1, 1, 1]);
 
 fid = fopen([datafolder, '/', dataname '/tree.txt'], 'w');
 DFSprint(t.tree, fid, '');

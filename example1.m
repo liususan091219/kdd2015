@@ -28,10 +28,10 @@ dataname = 'dblptitle';
 path([parentfolder, '/DataProcess/readdata/'], path);
 path([parentfolder, '/STOD/'], path);
 
-LoadData;
+%LoadData;
 SetParameters;
 
-t.tree = node([], [], [], '1');
+t.tree = node([], [], [], '1', 1:size(vocabulary, 1));
 
 EXP(t, [], 3, dwmat, options);
 
