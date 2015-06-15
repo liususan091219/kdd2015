@@ -117,6 +117,7 @@ else
         end                                
         currentnode_2 = currentnode_2.parent;
     end
+    
     % if t1 and t2 are siblings
 %     if length(leafpath1) == length(leafpath2) && length(leafpath1) == length(lca) + 1
 %         t1index = leafpath1(end);
