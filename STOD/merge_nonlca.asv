@@ -1,0 +1,24 @@
+function [leafpath1idx, p_remain, t1_pzgw] = merge_nonlca(leafpath1idx, p_remain, t1_pzgw, p)
+pindex = leafpath1(leafpath1idx); 
+leafpath1idx = leafpath1idx - 1;
+pzgw = diag(p.alpha1) * maptoV(p.twmatparent, p.voc_V_map, voc_size); %original pzgw
+pzgw = bsxrdivide(pzgw, sum(pzgw));
+p_remain = p_remain .* pzgw(pindex, :);            
+if isempty(t1_pzgw) == 0
+    t1_pzgw = bsxfun(@times, t1_pzgw, pzgw(pindex,:));
+end 
+pzgw(pindex, :) = p_remain;
+p_remain = sum(pzgw, 1);
+pzgw = bsxrdivide(pzgw, sum(pzgw));
+pwgz = bsxfun(@times, pzgw, pV);
+alpha1 = sum(pwgz, 2);
+alpha1 = alpha1 / sum(alpha1);
+pwgz = bsxrdivide(pwgz, sum(pwgz, 2));
+p.alpha1 = alpha1;
+p.twmatparent = pwgz(:, p.voc_V_map);
+for i = 1:size(p.children, 2)
+    p.children{i}.twmati = pwgz(i,p.children{i}.voc_V_map);
+    [~, ind] = sort(p.children{i}.twmati, 'descend');
+    p.children{i}.topici = vocabulary(p.children{i}.voc_V_map(ind(1, 1:10)));
+end
+end

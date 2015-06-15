@@ -39,7 +39,7 @@ EXP(t, [1], 2, dwmat, options);
 EXP(t, [1, 1], 2, dwmat, options);
 
 EXP(t, [1, 1,  1], 2, dwmat, options);
-%EXP(t, [1, 1,  1, 1], 2, dwmat, options);
+EXP(t, [1, 1,  1, 1], 2, dwmat, options);
 
 MER(t, [1], [1, 1, 1, 1]);
 
