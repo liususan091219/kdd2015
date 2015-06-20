@@ -8,7 +8,10 @@ p_remain = p_remain .* pzgw(pindex, :);
 if isempty(t1_pzgw) == 0
     t1_pzgw = bsxfun(@times, t1_pzgw, pzgw(pindex,:));
 end 
-pzgw(pindex, :) = p_remain;
+pzgw(pindex, :) = p_remain;% note: theoretically it should follow sum(pzgw) + sum(t1_pzgw) 
+% is a vector consists of only 0 and 1, but this fact does not hold true in reality, because 
+% the word filtering in line 26 of decomp, where it is possibly true that p(z_parent|w) is nz
+% while p(z_child|w) are all 0's for a word w
 p_remain = sum(pzgw, 1);
 pzgw = bsxrdivide(pzgw, sum(pzgw));
 pwgz = bsxfun(@times, pzgw, pV);

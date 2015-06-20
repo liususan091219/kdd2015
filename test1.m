@@ -1,10 +1,8 @@
 % example program for interactively constructing a topic hierarchy
 % Chi Wang et al., Towards Interactive Construction of Topical Hierarchy: A
 % Recursive Tensor Decomposition Approach, KDD 2015.
-% =================================================
-% MER example program when one of t1 and t2 is identical to their least
-% common ancestor
-% 
+% ==================================================
+% test MER special case when t2 is the parent of t1
 % ==================================================
 
 % read data
@@ -17,7 +15,7 @@ dataname = 'dblptitle';
 path([parentfolder, '/DataProcess/readdata/'], path);
 path([parentfolder, '/STOD/'], path);
 
-%LoadData;
+LoadData;
 SetParameters;
 
 t.tree = node([], [], [], '1', 1:size(vocabulary, 1));
@@ -27,10 +25,7 @@ EXP(t, [], 2, dwmat, options);
 EXP(t, [1], 2, dwmat, options);
 EXP(t, [1, 1], 2, dwmat, options);
 
-EXP(t, [1, 1,  1], 2, dwmat, options);
-EXP(t, [1, 1,  1, 1], 2, dwmat, options);
-
-MER(t, [1], [1, 1, 1, 1]);
+MER(t, [1], [1, 1]);
 
 fid = fopen([datafolder, '/', dataname '/tree.txt'], 'w');
 DFSprint(t.tree, fid, '');

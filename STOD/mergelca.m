@@ -1,4 +1,4 @@
-function [leafpath1idx, p_remain, t1_pzgw] = mergelca(p, leafpath1, leafpath1idx, p_remain, t1_pzgw, node_t1, node_t2)
+function mergelca(p, leafpath1, leafpath1idx, p_remain, t1_pzgw, node_t1, node_t2)
 global voc_size pV vocabulary
 pindex = leafpath1(leafpath1idx); 
 leafpath1idx = leafpath1idx - 1;
@@ -8,7 +8,10 @@ p_remain = p_remain .* pzgw(pindex, :);
 if isempty(t1_pzgw) == 0
     t1_pzgw = bsxfun(@times, t1_pzgw, pzgw(pindex,:));
 end 
-pzgw(pindex, :) = p_remain;
+pzgw(pindex, :) = p_remain; % note: theoretically it should follow sum(pzgw) + sum(t1_pzgw) 
+% is a vector consists of only 0 and 1, but this fact does not hold true in reality, because 
+% the word filtering in line 26 of decomp, where it is possibly true that p(z_parent|w) is nz
+% while p(z_child|w) are all 0's for a word w
 changed_index = [pindex];
 alpha1 = p.alpha1;
 new_pwgz = maptoV(p.twmatparent, p.voc_V_map, voc_size);
@@ -33,6 +36,7 @@ node_t2.twmatparent = new_pwgz(:, node_t2.voc_V_map); % this is wrong, need buil
 for i = 1:size(changed_index, 2)
     pwgz_changei = pwgz_change(i, :);
     node_t2.children{changed_index(i)}.twmati = pwgz_changei(node_t2.children{changed_index(i)}.voc_V_map);
+    node_t2.children{changed_index(i)}.name = [node_t2.name, num2str(changed_index(i))];
     [~, ind] = sort(node_t2.children{changed_index(i)}.twmati, 'descend');
     node_t2.children{changed_index(i)}.topici = vocabulary(node_t2.children{changed_index(i)}.voc_V_map(ind(1, 1:10)));
 end

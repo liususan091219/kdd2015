@@ -42,6 +42,8 @@ lca = [];
 for i = 1:min(size(leafpath1, 2), size(leafpath2, 2))
     if leafpath1(i) == leafpath2(i)
         lca = [lca leafpath1(i)];
+    else
+        break
     end
 end
 
@@ -78,7 +80,7 @@ if length(leafpath2) == length(lca)
     while true
         p = currentnode.parent;
         if strcmp(p.name, node_t2.name)
-            [leafpath1idx, p_remain, t1_pzgw] = mergelca(p, leafpath1, leafpath1idx, p_remain, t1_pzgw, node_t1, node_t2);
+            mergelca(p, leafpath1, leafpath1idx, p_remain, t1_pzgw, node_t1, node_t2);
             break;
         else
             [leafpath1idx, p_remain, t1_pzgw] = merge_nonlca(leafpath1 ,leafpath1idx, p_remain, t1_pzgw, p);
@@ -87,13 +89,13 @@ if length(leafpath2) == length(lca)
     end
 % if none of t1 or t2 is the lca
 else
-    if strcmp(node_t1.parent.name, lca.name) == 0
+    if strcmp(node_t1.parent.name, node_lca.name) == 0
         [p_remain_1, t1_pzgw, p_1, leafpath1idx] = merge_first(node_t1, leafpath1);
         currentnode_1 = p_1;
     else
         currentnode_1 = node_t1;
     end
-    if strcmp(node_t2.parent.name, lca.name) == 0
+    if strcmp(node_t2.parent.name, node_lca.name) == 0
         [p_remain_2, t2_pzgw, p_2, leafpath2idx] = merge_first(node_t2, leafpath2);
         currentnode_2 = p_2;
     else
@@ -117,7 +119,8 @@ else
         end                                
         currentnode_2 = currentnode_2.parent;
     end
-    
+    mergelca_twonodes(node_lca, leafpath1, leafpath1idx, p_remain_1, t1_pzgw, node_t1,...
+                                                                    leafpath2, leafpath2idx, p_remain_2, t2_pzgw, node_t2);
     % if t1 and t2 are siblings
 %     if length(leafpath1) == length(leafpath2) && length(leafpath1) == length(lca) + 1
 %         t1index = leafpath1(end);

@@ -15,7 +15,6 @@ classdef node < handle
 %       phrases = []; % n*7: [length, id, freq, ..., ranking_score]      
    children = {};
    parent = [];
-   dwmat = [];
    twmati=[];
    twmatparent = [];
    topici = [];
