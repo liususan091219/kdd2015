@@ -1,18 +1,12 @@
-% ================================================
-% author: Xueqing Liu
-% example program for interactively constructing a topic hierarchy
 % Chi Wang et al., Towards Interactive Construction of Topical Hierarchy: A
 % Recursive Tensor Decomposition Approach, KDD 2015.
 % =================================================
-% MER example program when neither t1 nor t2 is identical to their least
-% common ancestor
-%    
+% MER case 2: neither of t1 and t2 is their lca
 % ==================================================
 
-% read data
 global vocabulary parentfolder datafolder
 
-parentfolder = 'c:/Users/xliu93.UOFI/Work/kddrelease/kddrelease';
+parentfolder = 'c:/Users/xliu93.UOFI/Work/kddrelease/kdd2015release';
 datafolder = 'c:/Users/xliu93.UOFI/Work/kddrelease/kdd_data';
 dataname = 'dblptitle';
 

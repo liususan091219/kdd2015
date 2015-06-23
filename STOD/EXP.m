@@ -1,9 +1,5 @@
 % EXP(t, k): Discover k subtopics of a leaf topic, the leaf topic is
-% specified by t.leafpath, e.g., t = t1 and k = 3 looks like this:
-%
-%     t1     ------>          t1
-%                          /  |  \
-%                         t11  t12  t13
+% specified by t.leafpath
 %
 % Chi Wang et al., Towards Interactive Construction of Topical Hierarchy: A
 % Recursive Tensor Decomposition Approach, KDD 2015.
@@ -20,19 +16,13 @@ for i=1:size(leafpath, 2)
    if size(currentnode.children, 2) < direction
       error('invalid leaf path\n');
    end
-   twmat = currentnode.twmatparent;%[];
-%    for j=1:size(currentnode.children, 2)
-%       twmat = [twmat;currentnode.children{1,j}.twmati];
-%    end
+   twmat = currentnode.twmatparent;
    pzgw = diag(currentnode.alpha1) * twmat; % p(z|w) is proportional to p(w|z)p(z)
    pzgw = bsxfun(@rdivide, pzgw, sum(pzgw));
    twmati = currentnode.children{1,direction}.twmati;
    voc_p_mapi = currentnode.children{1, direction}.voc_p_map;
-   %twmatinz = twmati > 0;
    pzgmi = pzgw(direction,:);
-   %length = sum(twmatinz);
    length = size(twmati, 2);
-   %dwmat = dwmat(:,twmatinz) * sparse(1:length, 1:length, pzgmi(:,twmatinz));
    dwmat = dwmat(:, voc_p_mapi) * sparse(1:length, 1:length, pzgmi(:, voc_p_mapi));
    currentnode = currentnode.children{1,direction};
 end
