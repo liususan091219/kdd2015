@@ -7,10 +7,7 @@
 % Outputs: 1. issuccess: 0 if tensor decomposition is not success. This is
 % because depending on parameter alpha0 and k, some eigen value can be
 % negative, which will produce imaginary results. If this happens, the user
-% can either change alpha0 of the root node or the k of current node
-%          2. inferred.alpha: inferred topic distribution p(z) * parent's
-%          alpha0, which is set to the default alpha0 of the z-th child.
-%             inferred.twmat: k x V matrix which is topic word distribution
+% can choose from 
 % =================================================
 
 function [issuccess, inferred] = STOD_learn(dwmat, options)
@@ -58,6 +55,6 @@ clear U0;
 %inferred.alpha0 = ALPHA0;
 
 %ALPHA0 = sum(alpha1);
-[inferred.alpha,ind] = sort(bsxrdivide(alpha1, sum(alpha1)) * ALPHA0, 'descend');
+[inferred.alpha,ind] = sort(bsxrdivide(alpha1, sum(alpha1)), 'descend');
 inferred.twmat = wtmat(:,ind)';
 

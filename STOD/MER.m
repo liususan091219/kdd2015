@@ -56,13 +56,13 @@ for i = 1:size(leafpath2, 2)
 end
 
 % compute p(1), p(2), ..., p(V) for future use
-pV = sum(bsxfun(@times, t.tree.twmatparent, t.tree.alpha1'));
+pV = sum(bsxfun(@times, t.tree.twmatparent, t.tree.pz'));
 %pV = pV / sum(pV);
 voc_size = size(pV, 2);
 
 % case 1: t2 is the lca of t2 and t1
 if length(leafpath2) == length(lca)
-    [p_remain, t1_pzgw, p, leafpath1idx] = merge_first(node_t1, node_t2, leafpath1);
+    [p_remain, t1_pzgw, p, leafpath1idx, alphadiff] = merge_first(node_t1, node_t2, leafpath1);
     currentnode = p;
     while true
         p = currentnode.parent;
@@ -70,14 +70,14 @@ if length(leafpath2) == length(lca)
             merge_last_case1(leafpath1, leafpath1idx, p_remain, t1_pzgw, node_t1, node_t2);
             break;
         else
-            [leafpath1idx, p_remain, t1_pzgw] = merge_mid(leafpath1 ,leafpath1idx, p_remain, t1_pzgw, p);
+            [leafpath1idx, p_remain, t1_pzgw] = merge_mid(leafpath1 ,leafpath1idx, p_remain, t1_pzgw, p, alphadiff);
         end                                
         currentnode = currentnode.parent;
     end
 % case 2: none of t1 and t2 is their lca
 else
-    [p_remain_1, t1_pzgw, p_1, leafpath1idx] = merge_first(node_t1, node_lca, leafpath1);
-    [p_remain_2, t2_pzgw, p_2, leafpath2idx] = merge_first(node_t2, node_lca, leafpath2);
+    [p_remain_1, t1_pzgw, p_1, leafpath1idx, alphadiff1] = merge_first(node_t1, node_lca, leafpath1);
+    [p_remain_2, t2_pzgw, p_2, leafpath2idx, alphadiff2] = merge_first(node_t2, node_lca, leafpath2);
     currentnode_1 = p_1;
     currentnode_2 = p_2;
     while true
@@ -85,7 +85,7 @@ else
         if strcmp(p_1.name, node_lca.name)
             break;
         else
-            [leafpath1idx, p_remain_1, t1_pzgw] = merge_mid(leafpath1 ,leafpath1idx, p_remain_1, t1_pzgw, p_1);
+            [leafpath1idx, p_remain_1, t1_pzgw] = merge_mid(leafpath1 ,leafpath1idx, p_remain_1, t1_pzgw, p_1, alphadiff1);
         end                                
         currentnode_1 = currentnode_1.parent;
     end
@@ -94,12 +94,12 @@ else
         if strcmp(p_2.name, node_lca.name)
             break;
         else
-            [leafpath2idx, p_remain_2, t2_pzgw] = merge_mid(leafpath2 ,leafpath2idx, p_remain_2, t2_pzgw, p_2);
+            [leafpath2idx, p_remain_2, t2_pzgw] = merge_mid(leafpath2 ,leafpath2idx, p_remain_2, t2_pzgw, p_2, alphadiff2);
         end                                
         currentnode_2 = currentnode_2.parent;
     end
-    merge_last_case2(node_lca, leafpath1, leafpath1idx, p_remain_1, t1_pzgw, node_t1,...
-                                                                    leafpath2, leafpath2idx, p_remain_2, t2_pzgw, node_t2);
+    merge_last_case2(node_lca, leafpath1, leafpath1idx, p_remain_1, t1_pzgw, node_t1, alphadiff1, ...
+                                                                    leafpath2, leafpath2idx, p_remain_2, t2_pzgw, node_t2, alphadiff2);
 end
 
 end

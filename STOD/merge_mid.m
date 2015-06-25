@@ -1,8 +1,8 @@
-function [leafpath1idx, p_remain, t1_pzgw] = merge_mid(leafpath1 ,leafpath1idx, p_remain, t1_pzgw, p)
+function [leafpath1idx, p_remain, t1_pzgw] = merge_mid(leafpath1 ,leafpath1idx, p_remain, t1_pzgw, p, alpha_diff)
 global vocabulary voc_size pV
 pindex = leafpath1(leafpath1idx); 
 leafpath1idx = leafpath1idx - 1;
-pzgw = diag(p.alpha1) * maptoV(p.twmatparent, p.voc_V_map, voc_size); %original pzgw
+pzgw = diag(p.pz) * maptoV(p.twmatparent, p.voc_V_map, voc_size); %original pzgw
 pzgw = bsxrdivide(pzgw, sum(pzgw));
 p_remain = p_remain .* pzgw(pindex, :);            
 if isempty(t1_pzgw) == 0
@@ -18,7 +18,8 @@ pwgz = bsxfun(@times, pzgw, pV);
 alpha1 = sum(pwgz, 2);
 alpha1 = bsxrdivide(alpha1 , sum(alpha1));
 pwgz = bsxrdivide(pwgz, sum(pwgz, 2));
-p.alpha1 = alpha1;
+p.pz = alpha1;
+p.alpha0 = p.alpha0 - alpha_diff;
 p.twmatparent = pwgz(:, p.voc_V_map);
 for i = 1:size(p.children, 2)
     p.children{i}.twmati = pwgz(i,p.children{i}.voc_V_map);
