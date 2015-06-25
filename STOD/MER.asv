@@ -5,24 +5,22 @@
 % Parameters: 1. t: root node of the tree;
 %             2. leafpath1: specify t1 with its path, for example
 %             o/1/2's path is [1 2];
-%             3. leafpath2: specify t2 with its path, for example
+%             3. leafpath2: specify t2 with its path ,for example
 %             o/1/2's path is [1 2];
 % =======================================================================
-% MER contains 3 subroutines which specifies its 3 stages:
-%   stage 1: merge_first: compute the change to the parent of t1 or t2 (if
+% divide into 3 stages:
+%   stage 1: merge_first; compute the change to the parent of t1 or t2 (if
 %   it is not lca);
-%   stage 2: merge_mid: compute the change to the ancestor and non-lca of
+%   stage 2: merge_mid; compute the change to the ancestor and non-lca of
 %   t1 or t2;
-%   stage 3: merge_last: compute the change to the lca of t1 or t2;
-% =======================================================================
-% MER special cases:
+%   stage 3: merge_last; compute the change to the lca of t1 or t2;
+% special cases:
 %   case 1: t2 is the lca of t1 and t2
 %   case 1.1: t2 is the parent of t1
 %   case 1.2: t1's children is empty
 %   case 2: neither of t1 and t2 is their lca
 %   case 2.1: lca is the parent of t1 or t2 (or both)
 %   case 2.2: t1's or t2's (or both's) children is empty
-% ======================================================================
 
 function MER(t, leafpath1, leafpath2)
 global vocabulary voc_size pV
