@@ -19,8 +19,8 @@
 % 2. update the remaining p(z|w) for children of node t2: if the child z is
 % on the path from node t1 to node t2, p'(z|w) = p(z|w) - prod_{z' on the
 % path from t1 to z} p(z'|parent(z'), w); otherwise, don't change p(z|w)
-% 3. move node t1's children to be t2's;
-% 4. apply Bayesian rule p'(z|w)p(w) = p'(w|z)p'(z) to node t2, for those z
+% 3. move node t1's children to be under t2;
+% 4. apply Bayesian rule p'(z|w)p(w) = p'(w|z)p'(z) to children of node t2, but only to those z
 % corresponding to previously node t1's children, and the z on the path
 % from node t1 to node t2. e.g., t1's children are t2 and t3, t1's parent
 % is t4 and t4's parent is t5, and we want to merge t1 and t5, then after

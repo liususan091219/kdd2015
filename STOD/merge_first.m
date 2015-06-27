@@ -22,7 +22,7 @@
 % 1. compute p(z|w) for z = 1,2,...,k, w=1,2,...,V for node t1's parent;
 % 2. remove node t1 from its parent;
 % 3. p'(z|w) = p(z|w) / (1 - p(z_{t1}|w)) for z neq t1;
-% 4. apply Bayesian rule p'(z|w)p(w) = p'(w|z)p'(z), for each z=1,2,...,k,
+% 4. apply Bayesian rule p'(z|w)p(w) = p'(w|z)p'(z) to children of node t1's parent, 
 % compute p'(w|z) following p'(w|z) prop to p'(z|w)p(w); and
 % p'(z)=sum_{w}p(z|w)p(w), where p(w) is computed previously in MER;
 % =======================================================================
