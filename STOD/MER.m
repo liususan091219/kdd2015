@@ -115,4 +115,6 @@ else
                                                                     leafpath2, leafpath2idx, p_remain_2, t2_pzgw, node_t2, alphadiff2);
 end
 
+BFSreorder(t.tree);
+
 end
