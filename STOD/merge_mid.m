@@ -46,13 +46,14 @@ pzgw(pindex, :) = p_remain;% note: theoretically it should follow sum(pzgw) + su
 % while p(z_child|w) are all 0's for a word w
 p_remain = sum(pzgw, 1);
 pzgw = bsxrdivide(pzgw, sum(pzgw)); % step 3: normalie p(z|w)
-pwgz = bsxfun(@times, pzgw, pV);
+pwgz = bsxfun(@times, pzgw, pV);% step 4: compute p(w|z)
 pz = sum(pwgz, 2);
-pz = bsxrdivide(pz , sum(pz));
-pwgz = bsxrdivide(pwgz, sum(pwgz, 2)); % step 4: compute p(w|z)
+pz = bsxrdivide(pz , sum(pz));% p(z) = sum_w p(z|w)p(w) 
+pwgz = bsxrdivide(pwgz, sum(pwgz, 2)); 
 p.pz = pz;
-p.alpha0 = p.alpha0 - alpha_diff;
+p.alpha0 = p.alpha0 - alpha_diff; % update alpha0 of p
 p.twmatparent = pwgz(:, p.voc_V_map);
+% re-compute p's children's topics
 for i = 1:size(p.children, 2)
     p.children{i}.twmati = pwgz(i,p.children{i}.voc_V_map);
     [~, ind] = sort(p.children{i}.twmati, 'descend');

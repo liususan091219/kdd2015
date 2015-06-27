@@ -52,15 +52,15 @@ pzgw(t1index, :) = [];
 pzgw = bsxrdivide(pzgw, sum(pzgw, 1));% step 3: compute p'(z|w)
 pwgz = bsxfun(@times, pzgw, pV); % step 4: apply baysian rule and compute p'(w|z)
 pz = sum(pwgz, 2); % step 4: compute p'(z)
-pz = bsxrdivide(pz , sum(pz));
+pz = bsxrdivide(pz , sum(pz));% p(z) = sum_w p(z|w)p(w) 
 p.pz = pz;
 pwgz = bsxrdivide(pwgz, sum(pwgz, 2));
 p.twmatparent = pwgz(:, p.voc_V_map);
 alphadiff = p.children{t1index}.alpha0;
-p.alpha0 = p.alpha0 - alphadiff;
+p.alpha0 = p.alpha0 - alphadiff; % update p's alpha0
 p.children(t1index) = [];
 p_remain = sum(pzgw, 1);
-
+% re-compute p's children's topics
 for i = 1:size(p.children, 2)
     p.children{i}.twmati = pwgz(i,p.children{i}.voc_V_map);
     [~, ind] = sort(p.children{i}.twmati, 'descend');

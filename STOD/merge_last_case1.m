@@ -48,6 +48,9 @@ new_pwgz = maptoV(node_t2.twmatparent, node_t2.voc_V_map, voc_size);
 for i = 1:size(node_t1.children, 2)
     node_t1.children{i}.parent = node_t2;
     node_t2.children{end + 1} = node_t1.children{i}; % step 3: move node t1's children to node t2
+    % update the original children of node t2, because their parent has
+    % changed
+    node_t2.children{end}.voc_p_map = arrayfun(@(x)find(node_t2.voc_V_map ==x,1), node_t2.children{end}.voc_V_map);
     changed_index = [changed_index, size(node_t2.children, 2)];
     pzgw = [pzgw; t1_pzgw(i, :)];
     pz = [pz, 0];
@@ -55,20 +58,23 @@ for i = 1:size(node_t1.children, 2)
 end   
 pzgw_change = pzgw(changed_index, :);
 pwgz_change = bsxfun(@times, pzgw_change, pV); % step 4: apply Bayesian rule
-pz_change = sum(pwgz_change, 2);      
-alphasum = node_t2.pz(pindex); 
-pz_change = bsxrdivide(pz_change, sum(pz_change)) * alphasum;
+pz_change = sum(pwgz_change, 2);     % p(z) = sum_w p(z|w)p(w) 
+pzsum = node_t2.pz(pindex); 
+pz_change = bsxrdivide(pz_change, sum(pz_change)) * pzsum;%normalize p(z) such that p'(z_1) + sum_{z' is t2's children} p(z') = p(z_1), where
+% z_1 is t2's child on the path from t1 to t2
 pwgz_change = bsxrdivide(pwgz_change, sum(pwgz_change, 2));
 pz(changed_index) = pz_change;
 new_pwgz(changed_index, :) = pwgz_change;
 node_t2.pz = pz;
 node_t2.twmatparent = new_pwgz(:, node_t2.voc_V_map);
+% re-compute the topic for each changed children of t2
 for i = 1:size(changed_index, 2)
     pwgz_changei = pwgz_change(i, :);
     node_t2.children{changed_index(i)}.twmati = pwgz_changei(node_t2.children{changed_index(i)}.voc_V_map);
     [~, ind] = sort(node_t2.children{changed_index(i)}.twmati, 'descend');
     node_t2.children{changed_index(i)}.topici = vocabulary(node_t2.children{changed_index(i)}.voc_V_map(ind(1, 1:10)));
 end
+% handle the special case where t1 is the child of t2
 if strcmp(node_t1.parent.name, node_t2.name) == 1
     node_t2.pz(pindex) = [];
     node_t2.pz = bsxrdivide(node_t2.pz, sum(node_t2.pz));

@@ -83,21 +83,26 @@ for i =  1:size(node_t2.children, 2)     % step 3: move t2's children to be unde
     newnode.children{size(node_t1.children, 2) + i} = node_t2.children{i};
     node_t2.children{i}.parent = newnode;
 end
-node_lca.children{end+1} = newnode;
+node_lca.children{end+1} = newnode; % add new node to lca's children list
 pzgw_change = pzgw(changed_index, :); 
 pwgz_change = bsxfun(@times, pzgw_change, pV); % step 4: apply bayes rule to children of node lca
 pz_change = sum(pwgz_change, 2);      
 pzsum = node_lca.pz(pindex_1) + node_lca.pz(pindex_2); 
-pz_change = bsxrdivide(pz_change, sum(pz_change)) * pzsum;
+pz_change = bsxrdivide(pz_change, sum(pz_change)) * pzsum; % normalize p(z) such that sum of the original 
+% branch of t1 and t2 stay unchanged, i.e., p(z_1) + p(z_2) = p'(z_1) +
+% p'(z_2) + p(new node), where z_1 and z_2 are lca's children on the path
+% from t1 to lca and t2 to lca, respectively
 pwgz_change = bsxrdivide(pwgz_change, sum(pwgz_change, 2));
 pz(changed_index) = pz_change;
 new_pwgz(changed_index, :) = pwgz_change;
 node_lca.pz = pz;
 node_lca.twmatparent = new_pwgz(:, node_lca.voc_V_map); 
+% compute the voc_V_map and voc_p_map of newnode
 pwgz_changei = pwgz_change(3, :);
 newnode.voc_V_map = find(pwgz_changei);
 newnode.voc_p_map = arrayfun(@(x)find(node_lca.voc_V_map ==x,1), newnode.voc_V_map);
-newnode.alpha0 = alphadiff1 + alphadiff2;
+newnode.alpha0 = alphadiff1 + alphadiff2; % compute new node's alpha0, which is equal to the sum of t1 and t2's alpha0
+% (re-)compute topic of each of lca's children that are changed
 for i = 1:3
     pwgz_changei = pwgz_change(i, :);
     node_lca.children{changed_index(i)}.twmati = pwgz_changei(node_lca.children{changed_index(i)}.voc_V_map);
@@ -106,6 +111,8 @@ for i = 1:3
         node_lca.children{changed_index(i)}.topici = vocabulary(node_lca.children{changed_index(i)}.voc_V_map(ind(1, 1:10)));
     end
 end
+% handle the special case when t1's parent is their lca, when t1's branch
+% is therefore to be removed
 if strcmp(node_t1.parent.name, node_lca.name) == 1
     node_lca.pz(pindex_1) = [];   
     node_lca.children(pindex_1) = [];
@@ -114,6 +121,8 @@ if strcmp(node_t1.parent.name, node_lca.name) == 1
         pindex_2 = pindex_2 - 1;
     end
 end
+% handle the special case when t2's parent is their lca, when t2's branch
+% is therefore to be removed
 if strcmp(node_t2.parent.name, node_lca.name) == 1
     node_lca.pz(pindex_2) = [];
     node_lca.children(pindex_2) = [];
@@ -127,6 +136,8 @@ end
 if isempty(t2_pzgw) == 0
     pzgw = [pzgw; t2_pzgw];
 end
+% handle special case where t1 and t2 both doesn't have children, when
+% there is no new nodes.
 if isempty(pzgw) == 1
     node_lca.children(end) = [];
     node_lca.pz(end) = [];
@@ -137,15 +148,17 @@ if isempty(pzgw) == 1
 end
 pzgw = bsxrdivide(pzgw, sum(pzgw)); % step 5: compute p(z|w) for children of new node
 pwgz = bsxfun(@times, pzgw, pV); % step 6: apply Bayesian rule to get p(w|z)
-pz = sum(pwgz, 2);
-pz = bsxrdivide(pz, sum(pz));
+pz = sum(pwgz, 2); % p(z) = sum_w p(z|w)p(w)
+pz = bsxrdivide(pz, sum(pz)); % normalize to get p(z)
 newnode.pz = pz;
-pwgz = bsxrdivide(pwgz, sum(pwgz, 2));
+pwgz = bsxrdivide(pwgz, sum(pwgz, 2)); % normalize to get p(w|z)
 newnode.twmatparent = pwgz(:, newnode.voc_V_map);
-
+% compute the topic for each children of new node
 for i = 1:size(newnode.children, 2)
     pwgzi = pwgz(i, :);
     newnode.children{i}.twmati = pwgzi(newnode.children{i}.voc_V_map);
+    % update the voc_p_map of new node's children, because their parent has
+    % changed
     newnode.children{i}.voc_p_map = arrayfun(@(x)find(newnode.voc_V_map ==x,1), newnode.children{i}.voc_V_map);
     [~, ind] = sort(newnode.children{i}.twmati, 'descend');
     newnode.children{i}.topici = vocabulary(newnode.children{i}.voc_V_map(ind(1, 1:10)));
