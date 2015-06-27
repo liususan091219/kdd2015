@@ -1,4 +1,4 @@
-% example program for interactively constructing a topic hierarchy
+% test program 3
 % Chi Wang et al., Towards Interactive Construction of Topical Hierarchy: A
 % Recursive Tensor Decomposition Approach, KDD 2015.
 % ==================================================

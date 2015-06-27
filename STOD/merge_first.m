@@ -1,3 +1,7 @@
+% =======================================================================
+% author: Xueqing Liu
+% xliu93@illinois.edu
+% =======================================================================
 % Chi Wang et al., Towards Interactive Construction of Topical Hierarchy: A
 % Recursive Tensor Decomposition Approach, KDD 2015.
 % =======================================================================
@@ -30,20 +34,20 @@ function [p_remain, t1_pzgw, p, leafpath1idx, alphadiff] = merge_first(node_t1, 
 global voc_size pV vocabulary
 p = node_t1.parent;
 t1_pzgw = [];
+leafpath1idx = length(leafpath1);
+t1index = leafpath1(leafpath1idx);
 if isempty(node_t1.children) == 0
     t1_pzgw = diag(node_t1.pz) * maptoV(node_t1.twmatparent, node_t1.voc_V_map, voc_size);
     t1_pzgw = bsxrdivide(t1_pzgw, sum(t1_pzgw, 1));
 end
 if strcmp(node_t1.parent.name, node_lca.name) == 1
+    alphadiff = p.children{t1index}.alpha0;
     p_remain = zeros(1, voc_size); 
-    p = node_t1;
-    leafpath1idx = length(leafpath1);
+    p = node_t1;    
     return;
 end
 pzgw = diag(p.pz) * maptoV(p.twmatparent, p.voc_V_map, voc_size); % step 1: compute the original p(z|w)
 pzgw = bsxrdivide(pzgw, sum(pzgw, 1));% step 1: compute the original p(z|w)
-leafpath1idx = length(leafpath1);
-t1index = leafpath1(leafpath1idx);
 if isempty(t1_pzgw) == 0
     t1_pzgw = bsxfun(@times, t1_pzgw, pzgw(t1index, :));
 end

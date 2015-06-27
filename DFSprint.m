@@ -1,3 +1,12 @@
+% =======================================================================
+% author: Xueqing Liu
+% xliu93@illinois.edu
+% =======================================================================
+% % Chi Wang et al., Towards Interactive Construction of Topical Hierarchy: A
+% Recursive Tensor Decomposition Approach, KDD 2015.
+% =======================================================================
+% print indented tree text file
+% =======================================================================
 function DFSprint(currentnode, fid, spaces)
 fprintf(fid, spaces);
 fprintf(fid, '%s:\t', currentnode.name);

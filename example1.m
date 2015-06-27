@@ -1,3 +1,7 @@
+% =======================================================================
+% author: Xueqing Liu
+% xliu93@illinois.edu
+% =======================================================================
 % Chi Wang et al., Towards Interactive Construction of Topical Hierarchy: A
 % Recursive Tensor Decomposition Approach, KDD 2015.
 % =================================================

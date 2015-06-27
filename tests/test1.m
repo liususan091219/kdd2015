@@ -25,12 +25,8 @@ EXP(t, [], 2, dwmat, options);
 EXP(t, [1], 2, dwmat, options);
 EXP(t, [1, 1], 2, dwmat, options);
 
-fid = fopen([datafolder, '/', dataname '/tree_before.txt'], 'w');
-DFSprint(t.tree, fid, '');
-fclose(fid);
-
 MER(t, [1], [1, 1]);
 
-fid = fopen([datafolder, '/', dataname '/tree_after.txt'], 'w');
+fid = fopen([datafolder, '/', dataname '/tree.txt'], 'w');
 DFSprint(t.tree, fid, '');
 fclose(fid);

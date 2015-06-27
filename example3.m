@@ -1,7 +1,7 @@
 % Chi Wang et al., Towards Interactive Construction of Topical Hierarchy: A
 % Recursive Tensor Decomposition Approach, KDD 2015.
 % =================================================
-% MER case 2: neither of t1 and t2 is their lca
+% Example 3: MER case 2: neither of t1 and t2 is their lca
 % ==================================================
 
 global vocabulary parentfolder datafolder
