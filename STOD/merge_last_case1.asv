@@ -34,7 +34,7 @@ pindex = leafpath1(leafpath1idx);
 leafpath1idx = leafpath1idx - 1;
 pzgw = diag(node_t2.pz) * maptoV(node_t2.twmatparent, node_t2.voc_V_map, voc_size); %step 1: compute original pzgw
 pzgw = bsxrdivide(pzgw, sum(pzgw)); %step 1: compute original pzgw
-p_remain = p_remain .* pzgw(pindex, :);   % step 2: update the remaining p(z|w) of node t2 
+p_remain = p_remain .* pzgw(pindex, :);   % step 2: update the remainn p_remain or remainning p(z|w) of node t2 
 if isempty(t1_pzgw) == 0 
     t1_pzgw = bsxfun(@times, t1_pzgw, pzgw(pindex,:));
 end 
@@ -62,7 +62,7 @@ pwgz_change = bsxrdivide(pwgz_change, sum(pwgz_change, 2));
 pz(changed_index) = pz_change;
 new_pwgz(changed_index, :) = pwgz_change;
 node_t2.pz = pz;
-node_t2.twmatparent = new_pwgz(:, node_t2.voc_V_map);
+node_t2.twmatparent = new_pwgz(:, node_t2.voc_V_map); % this is wrong, need build map
 for i = 1:size(changed_index, 2)
     pwgz_changei = pwgz_change(i, :);
     node_t2.children{changed_index(i)}.twmati = pwgz_changei(node_t2.children{changed_index(i)}.voc_V_map);

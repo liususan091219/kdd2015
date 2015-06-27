@@ -19,12 +19,14 @@
 % =======================================================================
 % Computation steps:
 % 1. compute p(z|w) for z = 1,2,...,k, w=1,2,...,V for current node p;
-% 2. update p_remain, which is the remaining p(z|w) for children of current
-%  node p: if the child z is on the path from node t1 to p, p'(z|p,w) =
-%  p(z|p,w)- prod_{z' on the path from t1 to p} p(z'|parent(z'), w);
-%  otherwise, don't change p(z|w).  e.g., if node t1's parent is t3 and
-%  grandparent is t4, then after merging p'(z_{t3}|z_{t4},w) =
+% 2. update p_remain, which is p's original p(z|w) subtract the portion
+% corresponding to t1, e.g., if node t1's parent is t3 and grandparent is
+% t4, then after merging p'(z_{t3}|z_{t4},w) =
 % p(z_{t3}|z_{t4}, w) - p(z_{t1}|z_{t3}, w)p(z_{t3}|z_{t4},w).
+% 3. normalize p'(z|w) for each w, such that all z's sum up to 1.
+% 2. update p_remain, which is the remaining p(z|w) for children of current
+%  node p: if the child z is othe path from node t1 to p, p'(z|w) = p(z|w) - prod_{z' on the
+% path from t1 to z} p(z'|parent(z'), w); otherwise, don't change p(z|w)
 % 3. normalize p'(z|w) for each w, such that all z's sum up to 1.
 % 4. apply Bayesian rule p'(z|w)p(w) = p'(w|z)p'(z), for each z=1,2,...,k,
 % compute p'(w|z) following p'(w|z) prop to p'(z|w)p(w); and

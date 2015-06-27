@@ -1,6 +1,9 @@
 % Chi Wang et al., Towards Interactive Construction of Topical Hierarchy: A
 % Recursive Tensor Decomposition Approach, KDD 2015.
 % =======================================================================
+% subroutine of MER, compute the change to the parent of t1 or t2 (if
+%   it is not lca);
+% =======================================================================
 % merge_first(node_t1, node_lca, leafpath1)
 % Parameters: 1. node_t1: the non lca node(s) of t1 and t2;
 %             2. node_lca: the lca node of t1 and t2, which is either t1/t2
@@ -12,7 +15,7 @@
 %          3. p: if node t1's parent is not lca, p is set to node t1's
 %          parent; if otherwise, p is set to node t1;
 %          4. leafpath1idx: which position of leafpath1 we are currently in
-%          5. alphadiff: node t1's alpha0, which is saved to be divided by
+%          5. alphadiff: node t1's alpha0, which is saved to be subtracted by
 %          its grand parents's alpha0's
 % =======================================================================
 % Computation steps:
@@ -24,7 +27,7 @@
 % p'(z)=sum_{w}p(z|w)p(w), where p(w) is computed previously in MER;
 % =======================================================================
 function [p_remain, t1_pzgw, p, leafpath1idx, alphadiff] = merge_first(node_t1, node_lca, leafpath1)
-global voc_size
+global voc_size pV vocabulary
 p = node_t1.parent;
 t1_pzgw = [];
 if isempty(node_t1.children) == 0
@@ -37,8 +40,8 @@ if strcmp(node_t1.parent.name, node_lca.name) == 1
     leafpath1idx = length(leafpath1);
     return;
 end
-pzgw = diag(p.pz) * maptoV(p.twmatparent, p.voc_V_map, voc_size); % compute the original p(z|w)
-pzgw = bsxrdivide(pzgw, sum(pzgw, 1));% compute the original p(z|w)
+pzgw = diag(p.pz) * maptoV(p.twmatparent, p.voc_V_map, voc_size); % step 1: compute the original p(z|w)
+pzgw = bsxrdivide(pzgw, sum(pzgw, 1));% step 1: compute the original p(z|w)
 leafpath1idx = length(leafpath1);
 t1index = leafpath1(leafpath1idx);
 if isempty(t1_pzgw) == 0
@@ -46,20 +49,22 @@ if isempty(t1_pzgw) == 0
 end
 leafpath1idx = leafpath1idx - 1;
 pzgw(t1index, :) = [];
-pzgw = bsxrdivide(pzgw, sum(pzgw, 1)); % this has NaN mistake
-pwgz = bsxfun(@times, pzgw, pV);
-alpha1 = sum(pwgz, 2);
-alpha1 = bsxrdivide(alpha1 , sum(alpha1));
-p.pz = alpha1;
+pzgw = bsxrdivide(pzgw, sum(pzgw, 1));% step 3: compute p'(z|w)
+pwgz = bsxfun(@times, pzgw, pV); % step 4: apply baysian rule and compute p'(w|z)
+pz = sum(pwgz, 2); % step 4: compute p'(z)
+pz = bsxrdivide(pz , sum(pz));
+p.pz = pz;
 pwgz = bsxrdivide(pwgz, sum(pwgz, 2));
 p.twmatparent = pwgz(:, p.voc_V_map);
+alphadiff = p.children{t1index}.alpha0;
+p.alpha0 = p.alpha0 - alphadiff;
+p.children(t1index) = [];
+p_remain = sum(pzgw, 1);
+
 for i = 1:size(p.children, 2)
     p.children{i}.twmati = pwgz(i,p.children{i}.voc_V_map);
     [~, ind] = sort(p.children{i}.twmati, 'descend');
     p.children{i}.topici = vocabulary(p.children{i}.voc_V_map(ind(1, 1:10)));
 end
-alphadiff = p.children{t1index}.alpha0;
-p.alpha0 = p.alpha0 - alphadiff;
-p.children(t1index) = [];
-p_remain = sum(pzgw, 1);
+
 end

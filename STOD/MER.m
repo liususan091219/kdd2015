@@ -8,12 +8,15 @@
 %             3. leafpath2: specify t2 with its path, for example
 %             o/1/2's path is [1 2];
 % =======================================================================
-% MER contains 3 subroutines which specifies its 3 stages:
+% MER contains 4 subroutines which specifies its 3 stages:
 %   stage 1: merge_first: compute the change to the parent of t1 or t2 (if
 %   it is not lca);
 %   stage 2: merge_mid: compute the change to the ancestor and non-lca of
 %   t1 or t2;
-%   stage 3: merge_last: compute the change to the lca of t1 or t2;
+%   stage 3: merge_last_case1: compute the change to the lca, when the lca
+%   is the same as t2;
+%   stage 3: merge_last_case2: compute the change to the lca, when the lca
+%   is neither t1 nor t2;
 % =======================================================================
 % MER special cases:
 %   case 1: t2 is the lca of t1 and t2
