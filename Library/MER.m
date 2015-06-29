@@ -32,7 +32,7 @@
 % ======================================================================
 
 function MER(t, leafpath1, leafpath2)
-global vocabulary voc_size pV
+global voc_size pV
 
 % merge the deeper node first, so don't need to change leafpath2 since
 % leafpath2 is the parent node, after this swap, the only case leafpath2

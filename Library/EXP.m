@@ -54,7 +54,7 @@ end
 issuccess = 0;
 while issuccess == 0
     options.ALPHA0 = currentnode.alpha0;
-    [issuccess, inferred] = STOD_learn(dwmat, options);
+    [issuccess, inferred] = learnTopic(dwmat, options);
     if issuccess == 0
         disp('STOD failed with negative eigen values, this is either because alpha0 is too large, or because k is too large.');
         prompt = 'To fix this, choose from option 1: change alpha0 of root; 2: change k of current node:';
@@ -86,7 +86,7 @@ currentnode.pz = bsxrdivide(inferred.alpha, sum(inferred.alpha));
 for z=1:k
 	twmati = twmat(z,:);
     twmatinz = twmati > 0;
-    voc_V_mapi = currentnode.voc_V_map(find(twmatinz));
+    voc_V_mapi = currentnode.voc_V_map(twmatinz);
     [~, ind] = sort(twmati, 'descend');
     topici = vocabulary(currentnode.voc_V_map(ind(1, 1:10)));
     childi = node(twmati(twmatinz), currentnode, topici, [currentnode.name, num2str(z)], voc_V_mapi);

@@ -20,10 +20,10 @@ If you use any contents in this package, please cite:
 Code explanation
 **********************************************
 
-(1). Setting up parent folder (the same directory with this README.md):
-     >> parentfolder = 'c:/Users/xliu93.UOFI/Work/kddrelease/kdd2015release';
+(1)  Setting up parent folder (the same directory with this README.md):
+     >> parentfolder = '.';
      Setting up data folder:
-     >> datafolder = 'c:/Users/xliu93.UOFI/Work/kddrelease/kdd_data';
+     >> datafolder = 'data';
      Data folder consists of subfolders named by data_name, two files
      should be put in folder datafolder/data_name/: data_name.corpus, which
      is document-word file (each line is in the format 'docID wordID') and
@@ -31,10 +31,10 @@ Code explanation
    
      See example1.m for more details.
 
-(2)  Setting up path. Run the following two command to set up path for data
+(2)  Setting up path. Run the following two commands to set up path for data
      processing and main algorithms:
      >> path([parentfolder, '/DataProcess/readdata/'], path);
-     >> path([parentfolder, '/STOD/'], path);
+     >> path([parentfolder, '/Library/'], path);
      Notice this assumes your code is in the root directory (or the same 
      directory with this README.md), but if your code is in other directories,
      in addition to the two lines above, you should also set up the root 
@@ -72,7 +72,7 @@ Code explanation
 
 (7). Output format:
 
-     Output is in the same folder as input file. There are two types of generating an output:
+     Output is in the same folder as input file. There are two types of output:
 
      a) Indented tree text file: which is the tree representation of topics, where the
         hierarchical structure is represented by indentation:
@@ -91,10 +91,10 @@ Code explanation
 Data explanation
 **********************************************
 	
-kdd_data/csabstract contains CS abstracts used in the paper;
-kdd_data/dblptitle contains DBLP title short text used in our paper;
-kdd_data/pubmedabstract contains pubmed abstracts used in our paper;
-kdd_data/trecapnews contains ap news data used in our paper;
+data/csabstract contains CS abstracts used in the paper;
+data/dblptitle contains DBLP title short text used in our paper;
+data/pubmedabstract contains pubmed abstracts used in our paper;
+data/trecapnews contains ap news data used in our paper;
 
 **** For More Questions ****
 

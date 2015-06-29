@@ -10,12 +10,12 @@
 
 global vocabulary parentfolder datafolder
 
-parentfolder = 'c:/Users/xliu93.UOFI/Work/kddrelease/kdd2015release';
-datafolder = 'c:/Users/xliu93.UOFI/Work/kddrelease/kdd_data';
+parentfolder = '.';
+datafolder = 'data';
 dataname = 'dblptitle';
 
 path([parentfolder, '/DataProcess/readdata/'], path);
-path([parentfolder, '/STOD/'], path);
+path([parentfolder, '/Library/'], path);
 
 %LoadData;
 %SetParameters;
