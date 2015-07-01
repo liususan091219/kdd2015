@@ -53,10 +53,10 @@ Code explanation
 (5)  Running EXP:
      Before running any EXP, an empty node should be created first:
      >> t.tree = node([], [], [], '1', 1:size(vocabulary, 1));
-     Next, EXP should be run on the root node:
-     >> EXP(t, [], k, dwmat, options);
-     the second parameter of EXP specifies the path of the leaf node to be 
-     expanded, [] means root, [1] means the first child of root;
+     At the beginning EXP should be run on the root node:
+     >> EXP(t, [1], k, dwmat, options);
+     [1] specifies the path of the leaf node to be expanded, and is set to 
+     [] at the beginning;
      k is the number of children to be expanded;
      dwmat is the document word matrix, which is computed in LoadData;
      options is set in SetParameters;
