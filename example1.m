@@ -17,7 +17,7 @@ dataname = 'dblptitle';
 path([parentfolder, '/DataProcess/readdata/'], path);
 path([parentfolder, '/Library/'], path);
 
-%LoadData;
+LoadData;
 SetParameters;
 
 t.tree = node([], [], [], '1', 1:size(vocabulary, 1));
