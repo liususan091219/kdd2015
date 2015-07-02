@@ -11,8 +11,10 @@ classdef node < handle
    properties     
    children = {}; % children of the node
    parent = []; % parent of the node
-   twmati=[]; % a V-dimensional vector, the w-th dimension corresponding to p(w|i), where i is the index of this node among the node's parent's children
-   twmatparent = []; % a k x V matrix, where twmatparent(z, w) is equal to p(w|z), and z is the z-th topic/node among this node's children
+   twmati=[]; % topic distribution of this node among its parent, which is a V-dimensional vector, 
+   % the w-th dimension corresponding to p(w|i), where i is the index of this node among the node's parent's children
+   twmatparent = []; % topic distribution of this node's children, which is a k x V matrix, 
+   % where twmatparent(z, w) is equal to p(w|z), and z is the z-th topic/node among this node's children
    topici = []; % the top-10 word w according to p(w|i), sorted in descending order.
    alpha0 = []; % input parameter of EXP
    pz = []; % topic distribution p(i) of this node
@@ -22,8 +24,8 @@ classdef node < handle
    end
  
    methods
-      function obj=node(ti, parent, topici, name, voc_V_map)
-         obj.twmati = ti;
+      function obj=node(twmati, parent, topici, name, voc_V_map)
+         obj.twmati = twmati;
          obj.parent = parent;
          obj.topici = topici;
          obj.name = name;
