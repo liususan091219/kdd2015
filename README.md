@@ -55,11 +55,7 @@ Code explanation
      >> t.tree = node([], [], [], '1', 1:size(vocabulary, 1));
      Next, EXP should be run on the root node:
      >> EXP(t, [], k, dwmat, options);
-     the second parameter of EXP specifies the path of the leaf node to be 
-     expanded, [] means root, [1] means the first child of root;
-     k is the number of children to be expanded;
-     dwmat is the document word matrix, which is computed in LoadData;
-     options is set in SetParameters;
+     Please refer to node.m and EXP.m for parameter settings.
 
      See example1.m for more details.
 

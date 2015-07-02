@@ -4,3 +4,4 @@
 
 *.asv
 test2.txt
+./data/*
