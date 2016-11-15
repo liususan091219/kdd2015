@@ -5,7 +5,7 @@ Copyright
 This package contains the source code and the dataset used in the following paper:
 
 Chi Wang, Xueqing Liu, Yanglei Song, Jiawei Han. Towards Interactive Construction of Topical Hierarchy:
- A Recursive Tensor Decomposition Approach, 2014.
+ A Recursive Tensor Decomposition Approach, KDD'15.
 
 If you use any contents in this package, please cite:
 
